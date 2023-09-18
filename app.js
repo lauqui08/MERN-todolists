@@ -2,10 +2,12 @@ require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
+const auth = require('./middlewares/auth');
 //database connection
 const dbCon = require('./db/dbCon');
 //routers
 const userRouter = require('./routes/userRouter');
+
 
 //variables
 const MONGO_URI = process.env.MONGO_URI;
@@ -23,7 +25,9 @@ app.use(cookieParser());
 
 //routes
 app.use('/api/v1/todoLists/users',userRouter);
-
+app.get('/',(req, res) => {
+    res.send('welcome to home page');
+});
 
 
 //start server

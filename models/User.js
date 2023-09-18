@@ -27,11 +27,27 @@ const UserSchema = new mongoose.Schema({
 
 });
 
+//encrypt password and create token for the user
 UserSchema.pre('save',async function(next){
     const salt = await bcrypt.genSalt();
         this.password = await bcrypt.hash(this.password,salt);
-        this.token = jwt.sign(SECRET,this.email);
+        this.token = jwt.sign(this.email,SECRET);
     next();
 });
+
+//create static method for login route
+UserSchema.statics.login = async function(email, password){
+    const user = await this.findOne({email});
+    
+    if(user){
+        const match = await bcrypt.compare(password,user.password);
+        if(match){
+            return user;
+        }
+        throw Error('password');
+    }
+    throw Error('email');
+};
+
 const User = mongoose.model('User',UserSchema);
 module.exports = User;

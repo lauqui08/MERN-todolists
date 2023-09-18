@@ -1,5 +1,7 @@
 const express = require('express')
 const router = express.Router();
+const {auth} = require('../middlewares/auth');
+
 //controllers
 const {
     allUser,
@@ -7,20 +9,23 @@ const {
     singleUser,
     updateUser,
     deleteUser,
-    loginRouter} = require('../controllers/userController');
+    loginRouter,
+    logoutRouter} = require('../controllers/userController');
 
 //get all user
-router.get('/',allUser);
+router.get('/',auth,allUser);
 //create user
 router.post('/',createUser);
 //get single user
-router.get('/:id',singleUser,);
-//update user
-router.patch('/:id',updateUser);
+router.get('/:id',auth,singleUser,);
+//update user - change password
+router.patch('/:id',auth,updateUser);
 //delete user
-router.delete('/:id',deleteUser);
+router.delete('/:id',auth,deleteUser);
 //login
 router.post('/login',loginRouter);
+//logout
+router.post('/logout',auth,logoutRouter);
 
 
 
