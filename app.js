@@ -3,6 +3,8 @@ const express = require('express');
 const cors = require('cors');
 //database connection
 const dbCon = require('./db/dbCon');
+//routers
+const userRouter = require('./routes/userRouter');
 
 //variables
 const MONGO_URI = process.env.MONGO_URI;
@@ -15,6 +17,11 @@ const app = express();
 //middlewares
 app.use(cors());
 app.use(express.json());
+
+
+//routes
+app.use('/api/v1/todoLists');
+
 
 
 //start server
