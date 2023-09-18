@@ -1,5 +1,5 @@
 const userErrors = (error) => {
-
+    console.log(error)
     let errors = {email:'',password:'',fullname:''};
 
     //error for duplicate email(unique)

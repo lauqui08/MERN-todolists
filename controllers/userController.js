@@ -15,8 +15,12 @@ const createUser = async (req, res) => {
     const {fullname, email, password} = req.body;
     try {
         const user = await User.create({fullname, email, password});
+        const token = user.token;
+        // console.log(token);
+        res.cookie('userToken',token,{httpOnly:true});
         res.json(user);
     } catch (error) {
+        // console.log(error.code);
         const errors = userErrors(error);
         res.status(400).json(errors);
     }
@@ -55,7 +59,8 @@ const loginRouter = async (req, res) => {
     try {
         
     } catch (error) {
-        
+        const errors = userErrors(error);
+        res.status(401).json(errors);
     }
 };
 
