@@ -7,4 +7,4 @@ const dbCon = async(uri) => {
         console.log(error);
     }
 };
-module.EXPORTS=dbCon;
+module.exports=dbCon;

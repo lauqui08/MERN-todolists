@@ -1,27 +1,31 @@
 const User = require('../models/User');
+const userErrors = require('../middlewares/userErrors');
 
-//getall user
+//get all user
 const allUser = async (req,res) =>{
     try {
-        
+        res.send('show all users');
     } catch (error) {
         console.log(error);
     }
 };
 
-//create user
+//create user - registration
 const createUser = async (req, res) => {
+    const {fullname, email, password} = req.body;
     try {
-        
+        const user = await User.create({fullname, email, password});
+        res.json(user);
     } catch (error) {
-        console.log(error);
+        const errors = userErrors(error);
+        res.status(400).json(errors);
     }
 };
 
 //get single user
 const singleUser = async (req, res) => {
     try {
-        
+        res.send('single user');
     } catch (error) {
         console.log(error);
     }
@@ -30,18 +34,28 @@ const singleUser = async (req, res) => {
 //update user
 const updateUser = async (req, res) => {
     try {
-        
+        res.send('update user');
     } catch (error) {
         console.log(error);
     }
 };
 
 //delete user
-const deleteUser = async () => {
+const deleteUser = async (req, res) => {
+    try {
+        res.send('delete user');
+    } catch (error) {
+        console.log(error);
+    }
+};
+
+//login user
+const loginRouter = async (req, res) => {
+    const {email, password} = req.body;
     try {
         
     } catch (error) {
-        console.log(error);
+        
     }
 };
 
@@ -50,4 +64,5 @@ module.exports={
     createUser,
     singleUser,
     updateUser,
-    deleteUser};
+    deleteUser,
+    loginRouter};

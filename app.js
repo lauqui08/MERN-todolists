@@ -20,7 +20,7 @@ app.use(express.json());
 
 
 //routes
-app.use('/api/v1/todoLists');
+app.use('/api/v1/todoLists/users',userRouter);
 
 
 
