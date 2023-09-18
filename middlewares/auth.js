@@ -1,4 +1,5 @@
 const jwt = require('jsonwebtoken');
+
 const auth = (req, res, next) => {
     const {userToken} = req.cookies;
 
@@ -7,7 +8,7 @@ const auth = (req, res, next) => {
             if(error){
                 return res.status(403).json({message:"Please login to access this page."});
             }else{
-                console.log(token);
+                console.log('sheeeesh',token);
                 next();
             }
 
@@ -18,5 +19,6 @@ const auth = (req, res, next) => {
     }
 
 };
+
 
 module.exports={auth};

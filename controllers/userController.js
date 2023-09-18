@@ -1,11 +1,16 @@
 const User = require('../models/User');
-const userErrors = require('../middlewares/userErrors');
+const userErrors = require('../errors/userErrors');
 const bcrypt = require('bcrypt');
-
+const mongoose = require('mongoose');
 //get all user
 const allUser = async (req,res) =>{
     try {
-        res.send('show all users');
+        const users = await User.find({});
+        if(users){
+            return res.status(200).json(users)
+        }else{
+            return res.status(500).json({message:'Unable to display users. Please try again.'})
+        }
     } catch (error) {
         console.log(error);
     }
@@ -34,12 +39,17 @@ const createUser = async (req, res) => {
 const singleUser = async (req, res) => {
     const {id} = req.params;
     try {
-        const user = User.findOne({_id:id});
-        if(user){
-            return res.status(200).json(user);
+        if(mongoose.isValidObjectId(id)){
+            const user = await User.findOne({_id:id});
+            if(user){
+                return res.status(200).json(user);
+            }else{
+                return res.status(200).json({message:'User not found.'})
+            }
         }else{
-            return res.status(200).json({message:'User not found.'})
+            return res.status(400).json({message: 'Invalid request. Please try again.'});
         }
+        
     } catch (error) {
         console.log(error);
     }
@@ -50,15 +60,20 @@ const updateUser = async (req, res) => {
     const {id} = req.params;
     const {password} = req.body;
     try {
-        const salt = await bcrypt.genSalt();
-        const hashPassword = await bcrypt.hash(password,salt);
-        const user = User.findOneAndUpdate({_id:id},{password:hashPassword});
+        if(mongoose.isValidObjectId(id)){
+            const hashPassword = await bcrypt.hash(password,10);
+            const user = await User.findOneAndUpdate({_id:id},{password:hashPassword});
 
-        if(user){
-            //logout
+            if(user){
+                //logout
+                res.status(200).json({message:'Successfully changed password.'});
+            }else{
+                res.status(400).json({message:'Failed to change password. Please try again.'});
+            }
         }else{
-            res.status().json({message:'Failed to change password. Please try again.'});
+            return res.status(400).json({message: 'Invalid request. Please try again.'});
         }
+        
         
     } catch (error) {
         console.log(error);
@@ -85,7 +100,7 @@ const loginRouter = async (req, res) => {
         res.status(200).json(user);
     } catch (error) {
         const errors = userErrors(error);
-        res.status(503).json(errors);
+        res.status(400).json(errors);
     }
 };
 

@@ -2,11 +2,11 @@ require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
-const auth = require('./middlewares/auth');
 //database connection
 const dbCon = require('./db/dbCon');
 //routers
 const userRouter = require('./routes/userRouter');
+const todoRouter = require('./routes/todoRouter');
 
 
 //variables
@@ -25,6 +25,7 @@ app.use(cookieParser());
 
 //routes
 app.use('/api/v1/todoLists/users',userRouter);
+app.use('/api/v1/todoLists/todos',todoRouter);
 app.get('/',(req, res) => {
     res.send('welcome to home page');
 });
